@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .scroll-text-container {
+      width: 100%;                /* Full width of the container */
+      overflow: hidden;           /* Hide the overflowing text */
+      white-space: nowrap;        /* Prevent text wrapping */
+    }
+
+    .scroll-text-wrapper {
+      display: flex;              /* Use flex to line up text horizontally */
+      animation: scroll 10s linear infinite; /* Animation to scroll text */
+    }
+
+    .scroll-text {
+      padding-right: 50px;        /* Space between repeated text */
+      display: inline-block;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0); /* Start from the original position */
+      }
+      50% {
+        transform: translateX(-50%); /* Move halfway */
+      }
+      100% {
+        transform: translateX(-100%); /* Complete movement to the left */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-text-container">
+    <div class="scroll-text-wrapper">
+      <div class="scroll-text">This is a smoothly looping scrolling text effect that repeats endlessly. </div>
+      <div class="scroll-text">This is a smoothly looping scrolling text effect that repeats endlessly. </div>
+    </div>
+  </div>
+</body>
+</html>
