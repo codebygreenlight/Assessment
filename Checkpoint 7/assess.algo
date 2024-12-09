@@ -1,0 +1,53 @@
+ALGORITHM AnalyzeSentence
+    // Initialize counters
+    DECLARE char_count, word_count, vowel_count AS INTEGER
+    DECLARE char AS CHARACTER
+    DECLARE in_word AS BOOLEAN
+
+    SET char_count TO 0
+    SET word_count TO 0
+    SET vowel_count TO 0
+    SET in_word TO FALSE
+
+    // Input the sentence character by character
+    PRINT "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, modi! Molestiae iste vero, beatae, repellat magnam natus iure magni reprehenderit excepturi esse neque ut nisi provident officiis suscipit maxime ab.:"
+
+    REPEAT
+        INPUT char
+
+        // If the character is a period, stop reading
+        IF char = '.' THEN
+            INCREMENT char_count
+            EXIT REPEAT
+        ENDIF
+
+        // Increment character counter
+        INCREMENT char_count
+
+        // Check if the character is a vowel
+        IF char = 'a' OR char = 'e' OR char = 'i' OR char = 'o' OR char = 'u' OR
+           char = 'A' OR char = 'E' OR char = 'I' OR char = 'O' OR char = 'U' THEN
+            INCREMENT vowel_count
+        ENDIF
+
+        // Check for word boundaries
+        IF char = ' ' THEN
+            IF in_word = TRUE THEN
+                INCREMENT word_count
+            ENDIF
+            SET in_word TO FALSE
+        ELSE
+            SET in_word TO TRUE
+        ENDIF
+    UNTIL FALSE
+
+    // If the last character before the period was part of a word, count the word
+    IF in_word = TRUE THEN
+        INCREMENT word_count
+    ENDIF
+
+    // Print results
+    PRINT "Length of the sentence (characters):", char_count
+    PRINT "Number of words:", word_count
+    PRINT "Number of vowels:", vowel_count
+END ALGORITHM
