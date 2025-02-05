@@ -1,0 +1,40 @@
+.user-list {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-list h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.user-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.user-list li {
+  background-color: white;
+  margin: 1rem 0;
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.user-list li:hover {
+  transform: translateX(10px);
+  cursor: pointer;
+}
+
+.no-users {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+} 
