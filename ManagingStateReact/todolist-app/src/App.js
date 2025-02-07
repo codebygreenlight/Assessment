@@ -9,6 +9,8 @@ function App() {
     const savedTasks = localStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
+  
+  const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
 
   // Save tasks to localStorage whenever they change
   useEffect(() => {
@@ -16,20 +18,22 @@ function App() {
   }, [tasks]);
 
   // Add new task
-  const addTask = (taskText) => {
-    if (taskText.trim()) {
-      const newTask = {
-        id: Date.now(),
-        text: taskText,
-        completed: false
-      };
-      setTasks([...tasks, newTask]);
-    }
+  const addTask = (taskData) => {
+    const newTask = {
+      id: Date.now(),
+      title: taskData.title,
+      description: taskData.description,
+      completed: false,
+      createdAt: new Date().toISOString()
+    };
+    setTasks([...tasks, newTask]);
   };
 
-  // Delete task
+  // Delete task with confirmation
   const deleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      setTasks(tasks.filter(task => task.id !== taskId));
+    }
   };
 
   // Toggle task completion
@@ -40,21 +44,48 @@ function App() {
   };
 
   // Edit task
-  const editTask = (taskId, newText) => {
-    if (newText.trim()) {
-      setTasks(tasks.map(task =>
-        task.id === taskId ? { ...task, text: newText } : task
-      ));
-    }
+  const editTask = (taskId, updatedData) => {
+    setTasks(tasks.map(task =>
+      task.id === taskId ? { ...task, ...updatedData } : task
+    ));
   };
+
+  // Filter tasks
+  const filteredTasks = tasks.filter(task => {
+    if (filter === 'active') return !task.completed;
+    if (filter === 'completed') return task.completed;
+    return true;
+  });
 
   return (
     <div className="App">
       <div className="todo-container">
         <h1>To-Do List</h1>
         <TaskForm onAddTask={addTask} />
+        
+        <div className="filter-controls">
+          <button 
+            className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+            onClick={() => setFilter('all')}
+          >
+            All
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'active' ? 'active' : ''}`}
+            onClick={() => setFilter('active')}
+          >
+            Active
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
+            onClick={() => setFilter('completed')}
+          >
+            Completed
+          </button>
+        </div>
+
         <TaskList
-          tasks={tasks}
+          tasks={filteredTasks}
           onDeleteTask={deleteTask}
           onToggleTask={toggleTask}
           onEditTask={editTask}

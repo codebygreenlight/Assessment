@@ -2,40 +2,72 @@ import React, { useState } from 'react';
 
 function TaskItem({ task, onDelete, onToggle, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(task.text);
+  const [editData, setEditData] = useState({
+    title: task.title,
+    description: task.description
+  });
 
   const handleEdit = () => {
-    if (isEditing && editText.trim() !== task.text) {
-      onEdit(task.id, editText);
+    if (isEditing) {
+      if (editData.title.trim() && editData.description.trim()) {
+        onEdit(task.id, editData);
+        setIsEditing(false);
+      }
+    } else {
+      setIsEditing(true);
     }
-    setIsEditing(!isEditing);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
     <li className={`task-item ${task.completed ? 'completed' : ''}`}>
-      <input
-        type="checkbox"
-        checked={task.completed}
-        onChange={() => onToggle(task.id)}
-      />
-      {isEditing ? (
+      <div className="task-content">
         <input
-          type="text"
-          value={editText}
-          onChange={(e) => setEditText(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              handleEdit();
-            }
-          }}
+          type="checkbox"
+          checked={task.completed}
+          onChange={() => onToggle(task.id)}
         />
-      ) : (
-        <span onClick={() => onToggle(task.id)}>{task.text}</span>
-      )}
-      <button className="edit-button" onClick={handleEdit}>
-        {isEditing ? 'Save' : 'Edit'}
-      </button>
-      <button onClick={() => onDelete(task.id)}>Delete</button>
+        
+        {isEditing ? (
+          <div className="edit-form">
+            <input
+              type="text"
+              name="title"
+              value={editData.title}
+              onChange={handleChange}
+              placeholder="Task title"
+            />
+            <textarea
+              name="description"
+              value={editData.description}
+              onChange={handleChange}
+              placeholder="Task description"
+            />
+          </div>
+        ) : (
+          <div className="task-text">
+            <h3>{task.title}</h3>
+            <p>{task.description}</p>
+            <span className="task-date">
+              Created: {new Date(task.createdAt).toLocaleDateString()}
+            </span>
+          </div>
+        )}
+      </div>
+      
+      <div className="task-actions">
+        <button className="edit-button" onClick={handleEdit}>
+          {isEditing ? 'Save' : 'Edit'}
+        </button>
+        <button onClick={() => onDelete(task.id)}>Delete</button>
+      </div>
     </li>
   );
 }
